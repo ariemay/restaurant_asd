@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:restaurant_asd/controllers/login_controller.dart';
 import 'package:restaurant_asd/utils/screen_size.dart';
+import 'package:restaurant_asd/utils/validations.dart';
 
 class LoginScreen extends GetView<LoginController> {
+  String username, password;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,7 +33,9 @@ class LoginScreen extends GetView<LoginController> {
                       borderRadius: BorderRadius.all(Radius.circular(20))
                   ),
 
-                  child: Column(
+                  child: Form(
+                    key: controller.key,
+                    child:Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -38,10 +43,10 @@ class LoginScreen extends GetView<LoginController> {
                         padding: EdgeInsets.only(top: 30, left: 20, right: 20, bottom: 20),
                         child: TextFormField(
                           controller: controller.usernameTextField,
-                          // onSaved: (String val) {
-                          //   username = val;
-                          // },
-                          // validator: (value) => controller.validateLoginUsername(),
+                          onSaved: (String val) {
+                            username = val;
+                          },
+                          validator: (value) => value.isEmpty ? 'Password cannot be blank' : null,
                           decoration: InputDecoration(
                               contentPadding: new EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
                               border: new OutlineInputBorder(
@@ -52,10 +57,9 @@ class LoginScreen extends GetView<LoginController> {
                               filled: true,
                               hintStyle: new TextStyle(
                                   color: Colors.grey[800],
-                                  // fontSize: SizeConfig .safeBlockHorizontal * 4
                               ),
                               labelText: "Username",
-                              // errorStyle: TextStyle(height: 0.h),
+                              errorStyle: TextStyle(fontWeight: FontWeight.bold),
                               fillColor: Colors.white70
                           ),
                         ),
@@ -63,11 +67,11 @@ class LoginScreen extends GetView<LoginController> {
                       Padding(
                         padding: EdgeInsets.all(20),
                         child: TextFormField(
-                          controller: controller.usernameTextField,
-                          // onSaved: (String val) {
-                          //   username = val;
-                          // },
-                          // validator: (value) => controller.validateLoginUsername(),
+                          controller: controller.passwordTextField,
+                          onSaved: (String val) {
+                            password = val;
+                          },
+                          validator: (value) => Validation().validateLoginPassword(value),
                           decoration: InputDecoration(
                               contentPadding: new EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
                               border: new OutlineInputBorder(
@@ -78,10 +82,9 @@ class LoginScreen extends GetView<LoginController> {
                               filled: true,
                               hintStyle: new TextStyle(
                                 color: Colors.grey[800],
-                                // fontSize: SizeConfig .safeBlockHorizontal * 4
                               ),
-                              labelText: "Username",
-                              // errorStyle: TextStyle(height: 0.h),
+                              labelText: "Password",
+                              errorStyle: TextStyle(fontWeight: FontWeight.bold),
                               fillColor: Colors.white70
                           ),
                         ),
@@ -91,14 +94,14 @@ class LoginScreen extends GetView<LoginController> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           TextButton(
-                              // onPressed: () {
-                              //
-                              // },
+                              onPressed: () {
+                                controller.clearTextField();
+                              },
                               child: Text(
                                 "Reset",
-                                // style: TextStyle(
-                                //     color: ThemeColor.PRIMARY, fontSize: SizeConfig.safeBlockHorizontal * 4
-                                // ),
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 14
+                                ),
                               )),
                           TextButton(
                             onPressed: () {
@@ -106,15 +109,15 @@ class LoginScreen extends GetView<LoginController> {
                             },
                               child: Text(
                                 "Register",
-                                // style: TextStyle(
-                                //     color: ThemeColor.PRIMARY, fontSize: SizeConfig.safeBlockHorizontal * 4
-                                // ),
+                                style: TextStyle(
+                                    color: Colors.red, fontSize: 14
+                                ),
                               )),
                         ],
                       ),
                       SizedBox(
                         width: ScreenSize.screenWidth(context) * 0.7,
-                        child: RaisedButton(onPressed: () => print("Test"),
+                        child: RaisedButton(onPressed: () => controller.loginButtonPressed(context),
                           child: Text("Login"),
                         color: Colors.blue,
                         shape: RoundedRectangleBorder(
@@ -128,7 +131,7 @@ class LoginScreen extends GetView<LoginController> {
                       )
                     ],
                   ),
-                )
+                ))
               ],
             )
           ),

@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:restaurant_asd/routes.dart';
+import 'package:restaurant_asd/services/SqliteDB.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  final db = SqliteDB();
+  await db.countTable();
+
+  // SqliteDB().createUserTable();
+
   runApp(MainApp());
 }
 
